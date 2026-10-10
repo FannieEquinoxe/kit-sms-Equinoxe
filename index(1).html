@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#12233A">
+<title>Kit SMS · Levée de fonds Équinoxe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --jaune: #FFD615;
+    --marine: #12233A;
+    --rose: #C4508B;
+    --bleu: #5FA0DC;
+    --orange: #F68F47;
+    --creme: #F8F5F0;
+    --gris: #5B6678;
+    --bord: #E4DED3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background: var(--creme);
+    color: var(--marine);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--marine);
+    color: #fff;
+    padding: calc(22px + env(safe-area-inset-top)) 20px 20px;
+    text-align: center;
+  }
+  .marque {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    letter-spacing: .08em;
+    color: var(--jaune);
+    font-size: 1rem;
+  }
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 2.6rem;
+    line-height: 1;
+    margin: 4px 0 6px;
+    text-transform: uppercase;
+  }
+  header p { font-size: .95rem; opacity: .85; }
+  .progression { display: flex; gap: 6px; justify-content: center; margin-top: 16px; }
+  .progression span {
+    height: 6px; width: 46px; border-radius: 3px;
+    background: rgba(255,255,255,.25);
+    transition: background .2s;
+  }
+  .progression span.fait { background: var(--jaune); }
+
+  main { max-width: 560px; margin: 0 auto; padding: 24px 18px 28px; }
+  .etape { display: none; }
+  .etape.active { display: block; }
+
+  h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 2rem;
+    line-height: 1.05;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .aide { color: var(--gris); font-size: .95rem; margin-bottom: 18px; }
+  .aide-petit { color: var(--gris); font-size: .88rem; margin: -6px 0 16px; min-height: 1.3em; }
+
+  .groupe {
+    display: inline-block;
+    font-weight: 700;
+    font-size: .95rem;
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 999px;
+    margin: 6px 0 10px;
+  }
+  .groupe.bleu { background: var(--bleu); }
+  .groupe.rose { background: var(--rose); }
+  #liste-profils .groupe:not(:first-child) { margin-top: 18px; }
+
+  .carte {
+    display: block;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    background: #fff;
+    border: 2px solid var(--bord);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .carte strong { display: block; font-size: 1.02rem; margin-bottom: 2px; }
+  .carte span { display: block; color: var(--gris); font-size: .92rem; }
+  .carte:hover { border-color: var(--orange); }
+  .carte:focus-visible, .btn:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 3px solid var(--bleu); outline-offset: 2px;
+  }
+  .carte.choisie { border-color: var(--orange); background: #FFF6EC; }
+  .carte.radio input { position: absolute; opacity: 0; pointer-events: none; }
+  .carte.radio { position: relative; }
+  .carte.radio:focus-within { outline: 3px solid var(--bleu); outline-offset: 2px; }
+
+  .principe {
+    background: #fff;
+    border: 2px solid var(--bord);
+    border-left-width: 8px;
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+  }
+  .principe.orange { border-left-color: var(--orange); }
+  .principe.bleu { border-left-color: var(--bleu); }
+  .principe.rose { border-left-color: var(--rose); }
+  .principe strong { display: block; font-size: 1.02rem; margin-bottom: 2px; }
+  .principe span { display: block; color: var(--gris); font-size: .93rem; }
+
+  .regles {
+    background: #FFF6CC;
+    border: 2px solid var(--jaune);
+    border-radius: 14px;
+    padding: 14px 16px 6px;
+    margin-top: 16px;
+  }
+  .regles p { font-weight: 700; margin-bottom: 8px; }
+  .regles ol { padding-left: 20px; }
+  .regles li { font-size: .93rem; margin-bottom: 8px; }
+
+  .champ { display: block; margin-bottom: 16px; }
+  .champ > span { display: block; font-weight: 600; font-size: .95rem; margin-bottom: 6px; }
+  input[type="text"] {
+    width: 100%;
+    font: inherit;
+    font-size: 16px;
+    padding: 12px 14px;
+    border: 2px solid var(--bord);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--marine);
+  }
+  .consigne { font-weight: 700; margin: 22px 0 10px; font-size: 1.02rem; }
+
+  .btn {
+    display: block;
+    width: 100%;
+    font: inherit;
+    font-weight: 700;
+    font-size: 1.02rem;
+    text-align: center;
+    padding: 15px 18px;
+    border-radius: 12px;
+    border: 2px solid var(--marine);
+    background: var(--jaune);
+    color: var(--marine);
+    cursor: pointer;
+    margin-top: 14px;
+  }
+  .btn.secondaire { background: transparent; }
+  .btn.copie { background: var(--marine); color: var(--jaune); border-color: var(--marine); }
+  .btn[disabled] { opacity: .4; cursor: not-allowed; }
+  .retour {
+    background: none; border: none; font: inherit; color: var(--gris);
+    text-decoration: underline; cursor: pointer; padding: 6px 0; margin-bottom: 14px;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 330px;
+    font: inherit;
+    font-size: 16px;
+    line-height: 1.55;
+    padding: 14px;
+    border: 2px solid var(--bleu);
+    border-radius: 14px;
+    background: #fff;
+    color: var(--marine);
+    resize: vertical;
+  }
+  .alerte {
+    background: #FFF1CC;
+    border: 2px solid var(--jaune);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: .92rem;
+    margin-top: 10px;
+  }
+  .alerte[hidden] { display: none; }
+
+  .avant {
+    background: #fff;
+    border: 2px solid var(--bord);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-top: 18px;
+  }
+  .avant p { font-weight: 700; margin-bottom: 8px; }
+  .avant label { display: flex; gap: 10px; align-items: flex-start; font-size: .95rem; margin-bottom: 6px; cursor: pointer; }
+  .avant input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--rose); flex-shrink: 0; }
+
+  footer {
+    max-width: 560px; margin: 0 auto;
+    padding: 8px 18px calc(28px + env(safe-area-inset-bottom));
+    text-align: center; color: var(--gris); font-size: .85rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="marque">ÉQUINOXE</div>
+  <h1>Kit SMS</h1>
+  <p>Ton message de levée de fonds, prêt en 4 étapes.</p>
+  <div class="progression" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+</header>
+
+<main>
+  <!-- ACCUEIL : PRINCIPES -->
+  <section class="etape active" id="etape0">
+    <h2>Les principes du kit SMS</h2>
+    <p class="aide">Un mot de toi à tes proches vaut mille fois un mail « à froid » d'Équinoxe, parce qu'il passe par la confiance.</p>
+
+    <div class="principe orange">
+      <strong>Choisis le bon profil</strong>
+      <span>Un message par type de personne : prends celui qui ressemble le plus à ton ami ou à ton groupe.</span>
+    </div>
+    <div class="principe bleu">
+      <strong>Complète et personnalise</strong>
+      <span>Remplis les trous, choisis l'argument qui te parle, puis ajoute ta touche perso. Compte 2 minutes.</span>
+    </div>
+    <div class="principe rose">
+      <strong>Reste léger, sans pression</strong>
+      <span>Parle de toi, ne culpabilise personne. Ceux qui veulent donneront, les autres liront.</span>
+    </div>
+
+    <div class="regles">
+      <p>Les 3 règles d'or</p>
+      <ol>
+        <li>Le lien de don est déjà dans chaque message : utilise toujours celui-là.</li>
+        <li>Les dons sont déductibles à 66 % pour les personnes imposables.</li>
+        <li>Pas de don d'entreprise ni d'association. Il faut être de nationalité française ou résider en France.</li>
+      </ol>
+    </div>
+
+    <button type="button" class="btn" data-aller="1">J'ai compris</button>
+  </section>
+
+  <!-- ÉTAPE 1 -->
+  <section class="etape" id="etape1">
+    <button type="button" class="retour" data-aller="0">Retour aux principes</button>
+    <h2>Qui écrit le message ?</h2>
+    <p class="aide">C'est pour accorder le texte : engagé ou engagée, curieux ou curieuse.</p>
+    <button type="button" class="carte" data-genre="m"><strong>Masculin</strong><span>« Je me suis engagé chez Équinoxe »</span></button>
+    <button type="button" class="carte" data-genre="f"><strong>Féminin</strong><span>« Je me suis engagée chez Équinoxe »</span></button>
+  </section>
+
+  <!-- ÉTAPE 2 -->
+  <section class="etape" id="etape2">
+    <button type="button" class="retour" data-aller="1">Retour</button>
+    <h2>À qui tu écris ?</h2>
+    <p class="aide">Choisis le profil qui ressemble le plus à ta personne ou à ton groupe.</p>
+    <div id="liste-profils"></div>
+  </section>
+
+  <!-- ÉTAPE 3 -->
+  <section class="etape" id="etape3">
+    <button type="button" class="retour" data-aller="2">Retour</button>
+    <h2 id="titre-profil"></h2>
+    <p class="aide">Complète les trous, puis choisis l'argument qui te parle le plus.</p>
+    <div id="zone-etape3"></div>
+    <button type="button" class="btn" id="btn-suivant">Voir mon message</button>
+  </section>
+
+  <!-- ÉTAPE 4 -->
+  <section class="etape" id="etape4">
+    <button type="button" class="retour" data-aller="3">Modifier mes choix</button>
+    <h2>Ton message</h2>
+    <p class="aide">Relis-le, change ce que tu veux : c'est ton message. Puis copie-le et colle-le dans WhatsApp ou tes SMS.</p>
+    <textarea id="message" aria-label="Ton message"></textarea>
+    <div class="alerte" id="alerte" hidden>Il reste des [trous] à compléter dans le message.</div>
+    <button type="button" class="btn copie" id="btn-copier">Copier le message</button>
+
+    <div class="avant">
+      <p>Avant d'envoyer</p>
+      <label><input type="checkbox"> J'ai bien personnalisé mon message.</label>
+      <label><input type="checkbox"> La demande est claire : un lien, éventuellement un montant.</label>
+      <label><input type="checkbox"> Aucune pression ni culpabilisation.</label>
+    </div>
+
+    <button type="button" class="btn secondaire" id="btn-autre">Écrire à une autre personne</button>
+  </section>
+</main>
+
+<footer>
+  Rien n'est enregistré : ton message et tes choix restent sur ton appareil.<br>
+  C'est toi qui envoies chaque message, un par un.
+</footer>
+
+<script>
+/* ============================================================
+   ZONE À MODIFIER : tout le contenu du kit est ici.
+   ============================================================ */
+
+// Le lien de don. À REMPLACER par l'URL officielle (toujours le même pour tout le monde).
+const LIEN_DON = "https://membres.parti-equinoxe.fr/levee-de-fonds/";
+
+// Réduction d'impôt sur les dons (66 %).
+const TAUX_REDUCTION = 0.66;
+
+/*
+  Dans les modèles :
+  {{prenom}}    prénom saisi
+  {{montant}}   montant saisi
+  {{cout}}      coût réel après réduction d'impôt (calculé tout seul)
+  {{argument}}  argument choisi
+  {{lien}}      lien de don
+  engagé[[|e]]  s'accorde selon le genre : [[masculin|féminin]]
+*/
+const PROFILS = [
+  {
+    id: "deja",
+    groupe: "individuel",
+    titre: "Ami qui connaît déjà Équinoxe",
+    sousTitre: "Le projet lui parle déjà",
+    champs: { prenom: true },
+    montantDefaut: "20",
+    argumentLabel: "pourquoi ça compte pour toi",
+    argumentConsigne: "Pourquoi cette levée de fonds compte pour toi ?",
+    arguments: [
+      { titre: "Être entendu partout en France",
+        texte: "j'aimerais vraiment qu'on soit entendus partout en France, pas juste dans notre coin." },
+      { titre: "Une voix citoyenne",
+        texte: "j'en ai marre de voir toujours les mêmes têtes, je veux qu'une voix citoyenne existe enfin. Je veux que ce soit les citoyens qui reprennent la main sur le débat, pas toujours les partis." },
+      { titre: "Des idées à long terme, sans ego",
+        texte: "je veux soutenir un projet qui pense à long terme, pas des promesses jetées avant chaque élection. Pour une fois qu'un parti met les idées avant les egos, j'ai envie que ça pèse." }
+    ],
+    modele:
+`Salut {{prenom}} !
+
+Tu sais que je me suis engagé[[|e]] chez Équinoxe. Là on lance une grosse levée de fonds pour 2027, et {{argument}}
+
+Comme le projet te parle déjà, je me permets : un petit coup de pouce maintenant, ça compte double, ce sont les premiers dons qui rendent la collecte crédible. Même {{montant}}€ aide vraiment (et avec la réduction d'impôt de 66%, ça te revient à {{cout}}€ 😉).
+
+Le lien : {{lien}}. Merci à toi 🙏`
+  },
+  {
+    id: "politise",
+    groupe: "individuel",
+    titre: "Ami politisé, mais pas Équinoxe",
+    sousTitre: "Il suit la politique et a ses propres convictions",
+    champs: { prenom: true },
+    argumentLabel: "ce qui te semble cool ou unique dans le projet",
+    argumentConsigne: "Qu'est-ce qui te semble cool ou unique dans le projet ?",
+    arguments: [
+      { titre: "Dépolariser le débat",
+        texte: "Ce qui me plaît, c'est qu'ils avancent sujet par sujet, sans dogme ni logique de camp." },
+      { titre: "Une voix citoyenne",
+        texte: "Ils construisent leur programme avec des élus locaux et des citoyens, pas dans un bureau parisien. C'est un parti de citoyens, pas de carriéristes, et ça se sent dans leur façon de faire." },
+      { titre: "Pouvoir penser le long terme",
+        texte: "Ce que j'aime, c'est un projet qui pense à long terme, pas des promesses jetées avant chaque élection." }
+    ],
+    modele:
+`Salut {{prenom}},
+
+Toi qui suis la politique, je voulais te parler d'un mouvement dans lequel je me suis engagé[[|e]] : Équinoxe.
+
+{{argument}}
+
+On lance une collecte pour 2027. Je sais que t'as tes propres convictions, et c'est pas pour te rallier : je pense juste sincèrement que cette candidature mérite d'exister dans le débat. Même un petit don aide le mouvement à grandir (déductible à 66%). Le lien : {{lien}}.
+Et curieu[[x|se]] d'avoir ton avis, aussi 🙂`
+  },
+  {
+    id: "pasPolitise",
+    groupe: "individuel",
+    titre: "Ami non politisé",
+    sousTitre: "La politique, ce n'est pas trop son truc",
+    champs: { prenom: true },
+    montantDefaut: "5",
+    argumentLabel: "bénéfice simple, zéro jargon",
+    argumentConsigne: "Quel bénéfice simple tu mets en avant ? (zéro jargon)",
+    arguments: [
+      { titre: "Faire de la politique différemment",
+        texte: "essaie de faire de la politique autrement, sans les embrouilles partisanes habituelles." },
+      { titre: "Rassembler au lieu de diviser",
+        texte: "rassemble les gens au lieu de les monter les uns contre les autres." },
+      { titre: "Une voix citoyenne pour le long terme",
+        texte: "veut remettre les gens normaux au centre des décisions et reprendre le temps de bien faire, de penser le long terme." }
+    ],
+    modele:
+`Coucou {{prenom}} !
+Message perso : je me suis engagé[[|e]] dans un projet qui me tient vraiment à cœur, Équinoxe, un mouvement citoyen qui {{argument}}
+
+On fait une collecte en ce moment. Je sais que la politique, c'est pas trop ton truc 😅 mais justement, c'est un peu l'idée du projet. Si tu veux soutenir (même {{montant}}€, même juste partager), ça me ferait super plaisir : {{lien}}.
+Et sinon, on se voit bientôt ! ❤️`
+  },
+  {
+    id: "degoute",
+    groupe: "individuel",
+    titre: "Ami désabusé par la politique",
+    sousTitre: "Aucun parti ne le convainc vraiment",
+    champs: { prenom: true },
+    montantDefaut: "10",
+    argumentLabel: "bénéfice simple, zéro jargon",
+    argumentConsigne: "Quel bénéfice simple tu mets en avant ? (zéro jargon)",
+    arguments: [
+      { titre: "Pour faire autrement",
+        texte: "est né exactement du ras-le-bol qu'on partage tous les deux : faire de la politique autrement, sans les carriéristes ni les clashs." },
+      { titre: "Redonner du pouvoir aux citoyens",
+        texte: "part du principe que ce sont les citoyens qui devraient décider, pas toujours les mêmes." },
+      { titre: "Pas d'ego, juste des idéaux",
+        texte: "refuse les logiques de camp, bosse sur le concret plutôt que sur les egos et veut rassembler au lieu de diviser, pour une fois." }
+    ],
+    modele:
+`Coucou {{prenom}} !
+
+Je sais que la politique te soûle et qu'aucun parti te convainc vraiment. Moi aussi, franchement, et c'est un peu pour ça que je me suis engagé[[|e]] chez Équinoxe : un mouvement citoyen qui {{argument}}
+
+Ça me tient vraiment à cœur et je crois que ça peut te parler. On fait une collecte en ce moment : si tu veux soutenir (même {{montant}}€, même juste partager), ça me ferait super plaisir 🙏 Le lien : {{lien}}.
+
+Et sinon, on se capte bientôt !`
+  },
+  {
+    id: "famille",
+    groupe: "collectif",
+    titre: "Groupe WhatsApp famille",
+    sousTitre: "Ta famille, en un seul message",
+    champs: { prenom: false },
+    montantDefaut: "50",
+    argumentFacultatif: true,
+    argumentLabel: "argument",
+    argumentConsigne: "Tu veux ajouter un argument ? (facultatif)",
+    arguments: [
+      { titre: "Rassembler au lieu de diviser",
+        texte: "La volonté politique derrière Équinoxe, c'est vraiment de rassembler les gens au lieu de les monter les uns contre les autres." },
+      { titre: "Équinoxe, c'est faire différemment",
+        texte: "Ce qui me plaît, c'est qu'ils avancent sujet par sujet, sans dogme ni logique de camp. L'idée est de se baser sur les faits plus que sur les idéologies." },
+      { titre: "Être honnête",
+        texte: "Ça compte vraiment pour moi, et ça me toucherait que vous souteniez. C'est le projet dans lequel je me donne à fond en ce moment, j'avais envie de le partager avec vous." }
+    ],
+    modele:
+`Coucou la famille !
+
+Vous savez que je me suis engagé[[|e]] chez Équinoxe. On lance une levée de fonds à un moment clé pour 2027, alors je me permets : si vous voulez soutenir le projet (et me faire plaisir au passage 😄), le moindre coup de pouce compte.{{argument}} Bonus pour les imposables : les dons à un parti sont déductibles à 66%, donc un don de {{montant}}€ ne coûte réellement que {{cout}}€.
+
+Le lien : {{lien}}. Merci d'avance, gros bisous à tous ❤️`
+  },
+  {
+    id: "asso",
+    groupe: "collectif",
+    titre: "Groupe d'asso ou d'ONG aux valeurs proches",
+    sousTitre: "Un collectif qui partage vos valeurs",
+    champs: { prenom: false },
+    montantDefaut: "10 à 20",
+    argumentLabel: "valeur reliée à ce qui vous rassemble",
+    argumentConsigne: "Quelle valeur vous rassemble ?",
+    arguments: [
+      { titre: "Valeurs sociales",
+        texte: "remet la justice sociale et la dignité au cœur des décisions." },
+      { titre: "Valeurs environnementales",
+        texte: "veut relocaliser et produire dans le respect des limites planétaires." },
+      { titre: "Démocratie et citoyenneté",
+        texte: "veut redonner le pouvoir aux citoyens, par la démocratie directe, et place l'engagement citoyen et le long terme avant les egos et le court terme." }
+    ],
+    modele:
+`Hello à tous !
+
+Je me suis engagé[[|e]] chez Équinoxe, un mouvement qui {{argument}}
+
+Je me suis dit que ça pouvait vous parler, parce que ce sont un peu nos valeurs à nous. On lance une collecte importante en ce moment. Si le projet vous parle, même un petit don ({{montant}}€) fait une vraie différence quand on est nombreux, et pour les imposables c'est déductible à 66%.
+
+Le lien : {{lien}}. Et si vous préférez juste partager, ça aide déjà énormément. Merci !`
+  },
+  {
+    id: "amis",
+    groupe: "collectif",
+    titre: "Groupe d'amis ou de sport",
+    sousTitre: "Léger, sans pression",
+    champs: { prenom: false },
+    argumentFacultatif: true,
+    argumentLabel: "argument",
+    argumentConsigne: "Tu veux ajouter un argument ? (facultatif)",
+    arguments: [
+      { titre: "Rassembler et non diviser",
+        texte: "La volonté politique derrière Équinoxe, c'est vraiment de rassembler les gens au lieu de les monter les uns contre les autres." },
+      { titre: "Un parti différent",
+        texte: "Chez Équinoxe, on essaie de faire de la politique autrement, sans les embrouilles habituelles." },
+      { titre: "Jouer sur l'affect",
+        texte: "Ça compte vraiment pour moi, et ça me toucherait que vous souteniez. C'est le projet dans lequel je me donne à fond en ce moment, j'avais envie de le partager avec vous." }
+    ],
+    modele:
+`Salut l'équipe !
+
+Je me suis engagé[[|e]] dans un projet qui me tient à cœur, Équinoxe, et on fait une collecte en ce moment.{{argument}} Je vous spamme pas, promis 😄 juste au cas où : si vous voulez filer un petit coup de pouce (même le prix de deux bières), le lien est là : {{lien}}.
+
+Et sinon, un partage suffit à me faire plaisir ! On se voit bientôt 💪`
+  }
+];
+
+/* ============================================================
+   FIN DE LA ZONE À MODIFIER : le reste est le moteur de la page.
+   ============================================================ */
+
+const $ = (sel, racine = document) => racine.querySelector(sel);
+const etat = { genre: null, profilId: null, argIndex: null, prenom: "", montant: "" };
+const profilCourant = () => PROFILS.find(p => p.id === etat.profilId);
+
+function echapper(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function aller(n) {
+  document.querySelectorAll(".etape").forEach(e => e.classList.toggle("active", e.id === "etape" + n));
+  document.querySelectorAll(".progression span").forEach((s, i) => s.classList.toggle("fait", i < n));
+  if (n === 3) rendreEtape3();
+  if (n === 4) rendreEtape4();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function coutNet(montant) {
+  const n = parseFloat(String(montant).replace(",", "."));
+  if (isNaN(n)) return null;
+  const c = Math.round(n * (1 - TAUX_REDUCTION) * 100) / 100;
+  return c.toFixed(2).replace(".", ",").replace(/,00$/, "");
+}
+
+function accorder(texte) {
+  return texte.replace(/\[\[([^|\]]*)\|([^\]]*)\]\]/g, (_, m, f) => (etat.genre === "f" ? f : m));
+}
+
+function construire() {
+  const p = profilCourant();
+  let arg = "";
+  if (etat.argIndex !== null && etat.argIndex >= 0) arg = p.arguments[etat.argIndex].texte;
+  if (p.argumentFacultatif) arg = arg ? " " + arg : "";
+  else if (!arg) arg = "[" + p.argumentLabel + "]";
+
+  const prenom = etat.prenom.trim() || "[prénom]";
+  const montant = etat.montant.trim() || "[montant]";
+  const cout = coutNet(etat.montant) || "[coût réel]";
+
+  let t = p.modele
+    .replaceAll("{{argument}}", arg)
+    .replaceAll("{{prenom}}", prenom)
+    .replaceAll("{{montant}}", montant)
+    .replaceAll("{{cout}}", cout)
+    .replaceAll("{{lien}}", LIEN_DON);
+  return accorder(t);
+}
+
+/* Étape 1 : genre */
+document.querySelectorAll("[data-genre]").forEach(b => {
+  b.addEventListener("click", () => { etat.genre = b.dataset.genre; aller(2); });
+});
+
+/* Étape 2 : profils */
+(function rendreProfils() {
+  const groupes = [
+    ["individuel", "Message individuel", "bleu"],
+    ["collectif", "Message de groupe", "rose"]
+  ];
+  $("#liste-profils").innerHTML = groupes.map(([g, titre, couleur]) =>
+    `<p class="groupe ${couleur}">${titre}</p>` +
+    PROFILS.filter(p => p.groupe === g).map(p =>
+      `<button type="button" class="carte" data-profil="${p.id}"><strong>${p.titre}</strong><span>${p.sousTitre}</span></button>`
+    ).join("")
+  ).join("");
+})();
+
+$("#liste-profils").addEventListener("click", e => {
+  const b = e.target.closest("[data-profil]");
+  if (!b) return;
+  const p = PROFILS.find(x => x.id === b.dataset.profil);
+  etat.profilId = p.id;
+  etat.argIndex = null;
+  etat.prenom = "";
+  etat.montant = p.montantDefaut || "";
+  aller(3);
+});
+
+/* Étape 3 : trous et argument */
+function rendreEtape3() {
+  const p = profilCourant();
+  $("#titre-profil").textContent = p.titre;
+  let html = "";
+  if (p.champs.prenom) {
+    html += `<label class="champ"><span>Prénom de ta personne</span>
+      <input id="champ-prenom" type="text" autocomplete="off" value="${echapper(etat.prenom)}" placeholder="Son prénom"></label>`;
+  }
+  if (p.montantDefaut !== undefined) {
+    html += `<label class="champ"><span>Montant que tu suggères (en €)</span>
+      <input id="champ-montant" type="text" inputmode="decimal" autocomplete="off" value="${echapper(etat.montant)}"></label>
+      <p class="aide-petit" id="aide-cout"></p>`;
+  }
+  html += `<p class="consigne">${p.argumentConsigne}</p>`;
+  html += p.arguments.map((a, i) =>
+    `<label class="carte radio ${etat.argIndex === i ? "choisie" : ""}">
+      <input type="radio" name="arg" value="${i}" ${etat.argIndex === i ? "checked" : ""}>
+      <strong>${a.titre}</strong><span>${a.texte}</span></label>`
+  ).join("");
+  if (p.argumentFacultatif) {
+    html += `<label class="carte radio ${etat.argIndex === -1 ? "choisie" : ""}">
+      <input type="radio" name="arg" value="-1" ${etat.argIndex === -1 ? "checked" : ""}>
+      <strong>Sans argument supplémentaire</strong><span>Le message reste court et léger.</span></label>`;
+  }
+  $("#zone-etape3").innerHTML = html;
+  majBoutonSuivant();
+  majAideCout();
+}
+
+function majBoutonSuivant() {
+  const p = profilCourant();
+  $("#btn-suivant").disabled = !p.argumentFacultatif && etat.argIndex === null;
+}
+
+function majAideCout() {
+  const el = $("#aide-cout");
+  if (!el) return;
+  const p = profilCourant();
+  const c = p.modele.includes("{{cout}}") ? coutNet(etat.montant) : null;
+  el.textContent = c ? "Avec la réduction d'impôt de 66 %, ça revient à " + c + " € (pour un contribuable imposable)." : "";
+}
+
+$("#zone-etape3").addEventListener("input", e => {
+  if (e.target.id === "champ-prenom") etat.prenom = e.target.value;
+  if (e.target.id === "champ-montant") { etat.montant = e.target.value; majAideCout(); }
+});
+$("#zone-etape3").addEventListener("change", e => {
+  if (e.target.name !== "arg") return;
+  etat.argIndex = parseInt(e.target.value, 10);
+  document.querySelectorAll("#zone-etape3 .radio").forEach(l =>
+    l.classList.toggle("choisie", l.querySelector("input").checked));
+  majBoutonSuivant();
+});
+$("#btn-suivant").addEventListener("click", () => aller(4));
+
+/* Étape 4 : aperçu et copie */
+function rendreEtape4() {
+  $("#message").value = construire();
+  document.querySelectorAll(".avant input").forEach(c => (c.checked = false));
+  $("#btn-copier").textContent = "Copier le message";
+  majAlerte();
+}
+
+function majAlerte() {
+  $("#alerte").hidden = !/\[[^\]]+\]/.test($("#message").value);
+}
+$("#message").addEventListener("input", majAlerte);
+
+$("#btn-copier").addEventListener("click", async () => {
+  const zone = $("#message");
+  const bouton = $("#btn-copier");
+  try {
+    await navigator.clipboard.writeText(zone.value);
+  } catch (e) {
+    zone.focus();
+    zone.select();
+    zone.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+  }
+  bouton.textContent = "Copié ! Colle-le dans WhatsApp";
+  setTimeout(() => { bouton.textContent = "Copier le message"; }, 3000);
+});
+
+$("#btn-autre").addEventListener("click", () => aller(2));
+document.querySelectorAll("[data-aller]").forEach(b =>
+  b.addEventListener("click", () => aller(parseInt(b.dataset.aller, 10))));
+</script>
+</body>
+</html>
